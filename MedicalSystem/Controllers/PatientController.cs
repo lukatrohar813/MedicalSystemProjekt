@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using BL.Helper;
 using BL.IService;
 using BL.Models;
-using BL.Service;
 using MedicalSystem.Models.Patient;
 using Microsoft.AspNetCore.Mvc;
 
