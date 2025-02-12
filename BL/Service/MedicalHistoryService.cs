@@ -16,7 +16,8 @@ public class MedicalHistoryService(IUnitOfWork unitOfWork, IMapper mapper) : IMe
 
 	public async Task<IEnumerable<MedicalHistoryDto>> GetByPatientIdAsync(int patientId)
 	{
-		var histories = await unitOfWork.MedicalHistories.GetByPatientIdAsync(patientId);
+		var histories = await unitOfWork.MedicalHistories
+			.GetByPatientIdAsync(patientId);
 		return mapper.Map<IEnumerable<MedicalHistoryDto>>(histories);
 	}
 

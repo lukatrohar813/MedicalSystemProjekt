@@ -5,9 +5,8 @@
 		public int Id { get; set; }
 		public int PatientId { get; set; }
 		public string PatientName { get; set; }
-		public string DiseaseName { get; set; }
+		public string IllnessName { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
-		public string Status => EndDate.HasValue ? "Recovered" : "Ongoing";
 	}
 }

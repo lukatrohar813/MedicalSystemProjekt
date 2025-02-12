@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BL.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicalSystem.ViewModels.Prescription
 {
@@ -7,21 +8,19 @@ namespace MedicalSystem.ViewModels.Prescription
 		public int PatientId { get; set; }
 		public string PatientName { get; set; }
 
-		[Required(ErrorMessage = "Medicine name is required")]
-		[Display(Name = "Medicine Name")]
-		public string MedicineName { get; set; }
+		[Required(ErrorMessage = "Medicine is required")]
+		public int MedicineId { get; set; }
 
 		[Required(ErrorMessage = "Dosage is required")]
-		[Display(Name = "Dosage")]
 		public string Dosage { get; set; }
 
-		[Required(ErrorMessage = "Date is required")]
-		[Display(Name = "Prescription Date")]
+		[Required(ErrorMessage = "Prescription date is required")]
+		[DataType(DataType.Date)]
 		public DateTime PrescriptionDate { get; set; }
 
 		[Required(ErrorMessage = "Instructions are required")]
-		[Display(Name = "Instructions")]
-		[MinLength(10, ErrorMessage = "Instructions must be at least 10 characters long")]
 		public string Instructions { get; set; }
+
+		public IEnumerable<MedicineDto> AvailableMedicines { get; set; } = new List<MedicineDto>();
 	}
 }

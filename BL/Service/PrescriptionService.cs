@@ -16,7 +16,8 @@ public class PrescriptionService(IUnitOfWork unitOfWork, IMapper mapper) : IPres
 
 	public async Task<IEnumerable<PrescriptionDto>> GetByPatientIdAsync(int patientId)
 	{
-		var prescriptions = await unitOfWork.Prescriptions.GetByPatientIdAsync(patientId);
+		var prescriptions = await unitOfWork.Prescriptions
+			.GetByPatientIdAsync(patientId);
 		return mapper.Map<IEnumerable<PrescriptionDto>>(prescriptions);
 	}
 

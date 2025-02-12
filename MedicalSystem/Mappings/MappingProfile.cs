@@ -2,6 +2,8 @@
 using BL.Models;
 using MedicalSystem.Models.Patient;
 using MedicalSystem.ViewModels.Examination;
+using MedicalSystem.ViewModels.Illness;
+using MedicalSystem.ViewModels.Medicine;
 using MedicalSystem.ViewModels.MedicalHistory;
 using MedicalSystem.ViewModels.Prescription;
 
@@ -17,17 +19,23 @@ namespace MedicalSystem.Mappings
 
 			CreateMap<ExaminationCreateViewModel, ExaminationDto>();
 			CreateMap<ExaminationEditViewModel, ExaminationDto>();
+			CreateMap<ExaminationDto, ExaminationEditViewModel>();
 
 			CreateMap<MedicalHistoryCreateViewModel, MedicalHistoryDto>();
 			CreateMap<MedicalHistoryEditViewModel, MedicalHistoryDto>();
+			CreateMap<MedicalHistoryDto, MedicalHistoryEditViewModel>();
 
 			CreateMap<PrescriptionCreateViewModel, PrescriptionDto>();
 			CreateMap<PrescriptionEditViewModel, PrescriptionDto>();
-
-			CreateMap<PatientDto, PatientEditViewModel>();
-			CreateMap<ExaminationDto, ExaminationEditViewModel>();
-			CreateMap<MedicalHistoryDto, MedicalHistoryEditViewModel>();
 			CreateMap<PrescriptionDto, PrescriptionEditViewModel>();
+
+			CreateMap<IllnessCreateViewModel, IllnessDto>();
+			CreateMap<IllnessEditViewModel, IllnessDto>();
+			CreateMap<IllnessDto, IllnessEditViewModel>();
+
+			CreateMap<MedicineCreateViewModel, MedicineDto>();
+			CreateMap<MedicineEditViewModel, MedicineDto>();
+			CreateMap<MedicineDto, MedicineEditViewModel>();
 		}
 	}
 }

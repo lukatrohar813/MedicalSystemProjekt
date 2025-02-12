@@ -13,7 +13,10 @@ namespace DAL.Repository
 
 		public async Task<IEnumerable<MedicalHistory>> GetByPatientIdAsync(int patientId)
 		{
-			return await context.MedicalHistories.Where(mh => mh.PatientId == patientId).ToListAsync();
+			return await context.MedicalHistories
+				.Include(mh => mh.Illness)
+				.Where(mh => mh.PatientId == patientId)
+				.ToListAsync();
 		}
 
 		public async Task AddAsync(MedicalHistory medicalHistory)
@@ -23,7 +26,7 @@ namespace DAL.Repository
 
 		public async Task UpdateAsync(MedicalHistory medicalHistory)
 		{
-			context.MedicalHistories.Update(medicalHistory);
+			 context.MedicalHistories.Update(medicalHistory);
 		}
 		public async Task<IEnumerable<MedicalHistory>> GetAllAsync()
 		{

@@ -39,11 +39,18 @@
 
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <div class="mb-3">
-                            <label asp-for="DiseaseName" class="form-label">Disease Name</label>
-                            <input asp-for="DiseaseName" class="form-control" />
-                            <span asp-validation-for="DiseaseName" class="text-danger"></span>
-                        </div>
+	                    <div class="mb-3">
+		                    <label asp-for="IllnessId" class="form-label">Illness</label>
+		                    <select asp-for="IllnessId" class="form-select" asp-items="@(new SelectList(Model.AvailableIllnesses, "Id", "Name"))">
+			                    <option value="">Select an illness...</option>
+		                    </select>
+		                    <span asp-validation-for="IllnessId" class="text-danger"></span>
+		                    <div class="mt-2">
+			                    <a asp-controller="Illness" asp-action="Create" class="btn btn-sm btn-outline-primary">
+				                    <i class="bi bi-plus"></i> Add New Illness
+			                    </a>
+		                    </div>
+	                    </div>
 
                         <div class="mb-3">
                             <label asp-for="StartDate" class="form-label">Start Date</label>

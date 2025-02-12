@@ -7,9 +7,9 @@
 		IExaminationRepository Examinations { get; }
 		IExaminationImageRepository ExaminationImages { get; }
 		IPrescriptionRepository Prescriptions { get; }
+		IIllnessRepository Illnesses { get; }
+		IMedicineRepository Medicines { get; }
 
 		Task SaveChangesAsync();
 	}
-
-
 }

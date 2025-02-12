@@ -9,8 +9,8 @@ namespace BL.Models
 		[Required(ErrorMessage = "Patient ID is required")]
 		public int PatientId { get; set; }
 
-		[Required(ErrorMessage = "Disease name is required")]
-		public string DiseaseName { get; set; }
+		[Required(ErrorMessage = "Illness ID is required")]
+		public int IllnessId { get; set; }
 
 		[Required(ErrorMessage = "Start date is required")]
 		[DataType(DataType.Date)]
@@ -18,5 +18,7 @@ namespace BL.Models
 
 		[DataType(DataType.Date)]
 		public DateTime? EndDate { get; set; }
+
+		public IllnessDto? Illness { get; set; }
 	}
 }

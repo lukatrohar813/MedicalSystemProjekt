@@ -13,7 +13,10 @@ namespace DAL.Repository
 
 		public async Task<IEnumerable<Prescription>> GetByPatientIdAsync(int patientId)
 		{
-			return await context.Prescriptions.Where(p => p.PatientId == patientId).ToListAsync();
+			return await context.Prescriptions
+				.Include(p => p.Medicine)
+				.Where(p => p.PatientId == patientId)
+				.ToListAsync();
 		}
 		public async Task<IEnumerable<Prescription>> GetAllAsync()
 		{

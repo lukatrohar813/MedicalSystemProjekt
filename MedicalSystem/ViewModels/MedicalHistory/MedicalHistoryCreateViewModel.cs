@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BL.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicalSystem.ViewModels.MedicalHistory
 {
@@ -7,15 +8,15 @@ namespace MedicalSystem.ViewModels.MedicalHistory
 		public int PatientId { get; set; }
 		public string PatientName { get; set; }
 
-		[Required(ErrorMessage = "Disease name is required")]
-		[Display(Name = "Disease Name")]
-		public string DiseaseName { get; set; }
+		[Required(ErrorMessage = "Illness is required")]
+		public int IllnessId { get; set; }
 
 		[Required(ErrorMessage = "Start date is required")]
-		[Display(Name = "Start Date")]
+		[DataType(DataType.Date)]
 		public DateTime StartDate { get; set; }
 
-		[Display(Name = "End Date")]
+		[DataType(DataType.Date)]
 		public DateTime? EndDate { get; set; }
+		public IEnumerable<IllnessDto> AvailableIllnesses { get; set; } = new List<IllnessDto>();
 	}
 }

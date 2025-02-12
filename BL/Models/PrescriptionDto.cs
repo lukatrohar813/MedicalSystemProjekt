@@ -9,8 +9,8 @@ namespace BL.Models
 		[Required(ErrorMessage = "Patient ID is required")]
 		public int PatientId { get; set; }
 
-		[Required(ErrorMessage = "Medicine name is required")]
-		public string MedicineName { get; set; }
+		[Required(ErrorMessage = "Medicine ID is required")]
+		public int MedicineId { get; set; }
 
 		[Required(ErrorMessage = "Dosage is required")]
 		public string Dosage { get; set; }
@@ -21,5 +21,7 @@ namespace BL.Models
 
 		[Required(ErrorMessage = "Instructions are required")]
 		public string Instructions { get; set; }
+
+		public MedicineDto? Medicine { get; set; }
 	}
 }

@@ -43,11 +43,18 @@
 
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <div class="mb-3">
-                            <label asp-for="MedicineName" class="form-label"></label>
-                            <input asp-for="MedicineName" class="form-control" />
-                            <span asp-validation-for="MedicineName" class="text-danger"></span>
-                        </div>
+	                    <div class="mb-3">
+		                    <label asp-for="MedicineId" class="form-label">Medicine</label>
+		                    <select asp-for="MedicineId" class="form-select" asp-items="@(new SelectList(Model.AvailableMedicines, "Id", "Name"))">
+			                    <option value="">Select a medicine...</option>
+		                    </select>
+		                    <span asp-validation-for="MedicineId" class="text-danger"></span>
+		                    <div class="mt-2">
+			                    <a asp-controller="Medicine" asp-action="Create" class="btn btn-sm btn-outline-primary">
+				                    <i class="bi bi-plus"></i> Add New Medicine
+			                    </a>
+		                    </div>
+	                    </div>
 
                         <div class="mb-3">
                             <label asp-for="Dosage" class="form-label"></label>

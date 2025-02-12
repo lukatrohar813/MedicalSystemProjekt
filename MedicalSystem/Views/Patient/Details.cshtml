@@ -33,10 +33,10 @@
         </div>
     </div>
     <div class="form-group mt-4">
-	    <a asp-action="ExportDetailedCsv" asp-route-id="@Model.Patient.Id" class="btn btn-success">
-		    <i class="bi bi-file-earmark-excel"></i> Export Patient Data
-	    </a>
-	    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <a asp-action="ExportDetailedCsv" asp-route-id="@Model.Patient.Id" class="btn btn-success">
+            <i class="bi bi-file-earmark-excel"></i> Export Patient Data
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
     <!-- Personal Information -->
     <div class="card shadow-sm mb-4">
@@ -95,7 +95,8 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Disease</th>
+                                <th>Illness</th>
+                                <th>Description</th>
                                 <th>Start Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
@@ -105,21 +106,34 @@
                             @foreach (var history in Model.MedicalHistories.OrderByDescending(h => h.StartDate))
                             {
                                 <tr>
-                                    <td>@history.DiseaseName</td>
+                                    <td>
+                                        @if (history.Illness != null)
+                                        {
+                                            @history.Illness.Name
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Unknown Illness</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (history.Illness != null)
+                                        {
+                                            <small>@history.Illness.Description</small>
+                                        }
+                                    </td>
                                     <td>@history.StartDate.ToString("dd.MM.yyyy")</td>
                                     <td>
-	                                    @if (history.EndDate.HasValue)
-	                                    {
+                                        @if (history.EndDate.HasValue)
+                                        {
                                             <span class="badge bg-success">Recovered</span>
-
-                                             @history.EndDate?.ToString("dd.MM.yyyy")
+                                            @history.EndDate?.ToString("dd.MM.yyyy")
                                         }
-	                                    else
-	                                    {
-		                                    <span class="badge bg-warning">Ongoing</span>
-	                                    }
+                                        else
+                                        {
+                                            <span class="badge bg-warning">Ongoing</span>
+                                        }
                                     </td>
-
                                     <td>
                                         <div class="btn-group">
                                             <a asp-controller="MedicalHistory" asp-action="Edit" asp-route-id="@history.Id"
@@ -163,8 +177,8 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-	                            <th>Date</th>
-	                            <th>Time</th>
+                                <th>Date</th>
+                                <th>Time</th>
                                 <th>Type</th>
                                 <th>Notes</th>
                                 <th>Details</th>
@@ -175,8 +189,8 @@
                             @foreach (var exam in Model.Examinations.OrderByDescending(e => e.ExaminationDateTime))
                             {
                                 <tr>
-	                                <td>@exam.ExaminationDateTime.ToString("dd.MM.yyyy")</td>
-	                                <td>@exam.ExaminationDateTime.ToString("HH:mm")</td>
+                                    <td>@exam.ExaminationDateTime.ToString("dd.MM.yyyy")</td>
+                                    <td>@exam.ExaminationDateTime.ToString("HH:mm")</td>
                                     <td>
                                         <span class="badge bg-secondary">@exam.ExaminationType</span>
                                     </td>
@@ -230,8 +244,9 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-	                            <th>Date</th>
+                                <th>Date</th>
                                 <th>Medicine</th>
+                                <th>Description</th>
                                 <th>Dosage</th>
                                 <th>Instructions</th>
                                 <th>Actions</th>
@@ -241,8 +256,23 @@
                             @foreach (var prescription in Model.Prescriptions.OrderByDescending(p => p.PrescriptionDate))
                             {
                                 <tr>
-	                                <td>@prescription.PrescriptionDate.ToString("dd.MM.yyyy")</td>
-                                    <td>@prescription.MedicineName</td>
+                                    <td>@prescription.PrescriptionDate.ToString("dd.MM.yyyy")</td>
+                                    <td>
+                                        @if (prescription.Medicine != null)
+                                        {
+                                            @prescription.Medicine.Name
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Unknown Medicine</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (prescription.Medicine != null)
+                                        {
+                                            <small>@prescription.Medicine.Description</small>
+                                        }
+                                    </td>
                                     <td>@prescription.Dosage</td>
                                     <td>@prescription.Instructions</td>
                                     <td>

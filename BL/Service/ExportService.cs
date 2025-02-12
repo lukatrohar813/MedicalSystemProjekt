@@ -68,7 +68,7 @@ namespace BL.Service
 			builder.AppendLine("Disease,Start Date,End Date,Status");
 			foreach (var history in medicalHistories)
 			{
-				builder.AppendLine($"{history.DiseaseName},{history.StartDate:dd.MM.yyyy},{(history.EndDate?.ToString("dd.MM.yyyy") ?? "Ongoing")},{(history.EndDate.HasValue ? "Recovered" : "Ongoing")}");
+				builder.AppendLine($"{history.Illness},{history.StartDate:dd.MM.yyyy},{(history.EndDate?.ToString("dd.MM.yyyy") ?? "Ongoing")},{(history.EndDate.HasValue ? "Recovered" : "Ongoing")}");
 			}
 			builder.AppendLine();
 
@@ -84,7 +84,7 @@ namespace BL.Service
 			builder.AppendLine("Date,Medicine,Dosage,Instructions");
 			foreach (var prescription in prescriptions)
 			{
-				builder.AppendLine($"{prescription.PrescriptionDate:dd.MM.yyyy},{prescription.MedicineName},{prescription.Dosage},{prescription.Instructions?.Replace(",", ";")}");
+				builder.AppendLine($"{prescription.PrescriptionDate:dd.MM.yyyy},{prescription.Medicine},{prescription.Dosage},{prescription.Instructions?.Replace(",", ";")}");
 			}
 
 			return Encoding.UTF8.GetBytes(builder.ToString());
