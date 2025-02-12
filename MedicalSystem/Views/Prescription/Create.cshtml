@@ -1,0 +1,132 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model MedicalSystem.ViewModels.Prescription.PrescriptionCreateViewModel
+
+@{
+    ViewData["Title"] = "New Prescription";
+}
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Patient" asp-action="Index">Patients</a></li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Patient" asp-action="Details" asp-route-id="@Model.PatientId">
+                            @Model.PatientName
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">New Prescription</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <h2>New Prescription</h2>
+            <h5 class="text-muted">Patient: @Model.PatientName</h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="PatientId" />
+                <input type="hidden" asp-for="PatientName" />
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="MedicineName" class="form-label"></label>
+                            <input asp-for="MedicineName" class="form-control" />
+                            <span asp-validation-for="MedicineName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Dosage" class="form-label"></label>
+                            <input asp-for="Dosage" class="form-control"
+                                   placeholder="e.g., 1 tablet twice daily, 5ml three times daily" />
+                            <span asp-validation-for="Dosage" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PrescriptionDate" class="form-label"></label>
+                            <input asp-for="PrescriptionDate" class="form-control" type="text" />
+                            <span asp-validation-for="PrescriptionDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Instructions" class="form-label"></label>
+                            <textarea asp-for="Instructions" class="form-control" rows="4"
+                                      placeholder="Enter detailed instructions for taking the medicine..."></textarea>
+                            <span asp-validation-for="Instructions" class="text-danger"></span>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Create Prescription</button>
+                            <a asp-controller="Patient" asp-action="Details" asp-route-id="@Model.PatientId"
+                               class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Prescription Tips</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="bi bi-capsule text-primary"></i>
+                            <strong>Medicine Name:</strong> Use the full and correct name of the medicine
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-clock text-primary"></i>
+                            <strong>Dosage:</strong> Specify amount and frequency clearly
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-card-text text-primary"></i>
+                            <strong>Instructions:</strong> Include any special instructions (e.g., "Take with food")
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Example Formats</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Dosage examples:</strong></p>
+                    <ul>
+                        <li>1 tablet three times daily</li>
+                        <li>5ml every 6 hours</li>
+                        <li>2 capsules before bed</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function() {
+            // Initialize datepicker
+            $('input[name="PrescriptionDate"]').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                endDate: '0d'
+            }).datepicker('setDate', new Date());
+        });
+    </script>
+}

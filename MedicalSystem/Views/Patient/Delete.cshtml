@@ -1,0 +1,56 @@
+﻿@model MedicalSystem.Models.Patient.PatientDetailsViewModel
+
+@{
+    ViewData["Title"] = "Delete Patient";
+}
+
+<div class="container">
+    <h2>Delete Patient</h2>
+
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Warning!</h4>
+        <p>Are you sure you want to delete this patient? This action cannot be undone and will also delete:</p>
+        <ul>
+            <li>@Model.MedicalHistories.Count() medical history records</li>
+            <li>@Model.Prescriptions.Count() prescriptions</li>
+            <li>@Model.Examinations.Count() examinations</li>
+        </ul>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Patient Information</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Patient Number</dt>
+                <dd class="col-sm-9">@Model.Patient.PatientNumber</dd>
+
+                <dt class="col-sm-3">Name</dt>
+                <dd class="col-sm-9">@Model.Patient.FirstName @Model.Patient.LastName</dd>
+
+                <dt class="col-sm-3">OIB</dt>
+                <dd class="col-sm-9">@Model.Patient.OIB</dd>
+
+                <dt class="col-sm-3">Date of Birth</dt>
+                <dd class="col-sm-9">@Model.Patient.DateOfBirth.ToShortDateString()</dd>
+
+                <dt class="col-sm-3">Gender</dt>
+                <dd class="col-sm-9">@Model.Patient.Gender</dd>
+            </dl>
+        </div>
+    </div>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Patient.Id" />
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Details" asp-route-id="@Model.Patient.Id" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

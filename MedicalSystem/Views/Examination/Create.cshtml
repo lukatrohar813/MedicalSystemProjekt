@@ -1,0 +1,164 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model MedicalSystem.ViewModels.Examination.ExaminationCreateViewModel
+
+@{
+    ViewData["Title"] = "New Examination";
+}
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Patient" asp-action="Index">Patients</a></li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Patient" asp-action="Details" asp-route-id="@Model.PatientId">
+                            @Model.PatientName
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">New Examination</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <h2>New Examination</h2>
+            <h5 class="text-muted">Patient: @Model.PatientName</h5>
+        </div>
+    </div>
+
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-8">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="PatientId" />
+                <input type="hidden" asp-for="PatientName" />
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="ExaminationType" class="form-label">Examination Type</label>
+                            <select asp-for="ExaminationType" class="form-select">
+                                <option value="">Select type...</option>
+                                <option value="GP">General Physical Examination</option>
+                                <option value="KRV">Blood Test</option>
+                                <option value="X-RAY">X-Ray</option>
+                                <option value="CT">CT Scan</option>
+                                <option value="MR">MRI Scan</option>
+                                <option value="ULTRA">Ultrasound</option>
+                                <option value="EKG">Electrocardiogram</option>
+                                <option value="ECHO">Echocardiogram</option>
+                                <option value="EYE">Eye Examination</option>
+                                <option value="DERM">Dermatological Examination</option>
+                                <option value="DENTA">Dental Examination</option>
+                                <option value="MAMMO">Mammography</option>
+                                <option value="NEURO">Neurological Examination</option>
+                            </select>
+                            <span asp-validation-for="ExaminationType" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ExaminationDateTime" class="form-label">Date & Time</label>
+                            <input asp-for="ExaminationDateTime" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="ExaminationDateTime" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">Notes</label>
+                            <textarea asp-for="Notes" class="form-control" rows="4"
+                                      placeholder="Enter examination notes..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Examination Images</label>
+                            <input type="file" class="form-control" name="Images" multiple
+                                   accept="image/*" id="imageInput" />
+                            <small class="text-muted">
+                                You can select multiple images. Supported formats: JPG, PNG
+                            </small>
+                        </div>
+
+                        <div id="imagePreview" class="row g-2 mt-2">
+                            <!-- Preview images will be shown here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-primary">Create Examination</button>
+                        <a asp-controller="Patient" asp-action="Details" asp-route-id="@Model.PatientId"
+                           class="btn btn-secondary">Cancel</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Tips</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-calendar"></i>
+                                Select the current date and time by default
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-card-image"></i>
+                                Upload relevant examination images
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-pencil"></i>
+                                Include detailed notes about findings
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+
+            Array.from(e.target.files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const col = document.createElement('div');
+                        col.className = 'col-md-4';
+                        col.innerHTML = `
+                            <div class="card">
+                                <img src="${event.target.result}" class="card-img-top"
+                                     style="height: 150px; object-fit: cover;">
+                                <div class="card-body p-2">
+                                    <small class="text-muted">${file.name}</small>
+                                </div>
+                            </div>
+                        `;
+                        preview.appendChild(col);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        // Set default date and time
+        window.addEventListener('load', function() {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.querySelector('input[type="datetime-local"]').value = now.toISOString().slice(0, 16);
+        });
+    </script>
+}

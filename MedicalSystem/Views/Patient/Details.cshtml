@@ -1,0 +1,285 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model MedicalSystem.Models.Patient.PatientDetailsViewModel
+
+@{
+    ViewData["Title"] = $"Patient Details - {Model.Patient.FirstName} {Model.Patient.LastName}";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumb -->
+    <div class="row mb-3">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Patients</a></li>
+                    <li class="breadcrumb-item active">Patient Details</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col d-flex justify-content-between align-items-center">
+            <h2>Patient Information</h2>
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.Patient.Id" class="btn btn-warning">
+                    <i class="bi bi-pencil"></i> Edit Patient
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.Patient.Id" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Delete
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="form-group mt-4">
+	    <a asp-action="ExportDetailedCsv" asp-route-id="@Model.Patient.Id" class="btn btn-success">
+		    <i class="bi bi-file-earmark-excel"></i> Export Patient Data
+	    </a>
+	    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+    <!-- Personal Information -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Personal Details</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Patient Number</dt>
+                        <dd class="col-sm-8">@Model.Patient.PatientNumber</dd>
+
+                        <dt class="col-sm-4">First Name</dt>
+                        <dd class="col-sm-8">@Model.Patient.FirstName</dd>
+
+                        <dt class="col-sm-4">Last Name</dt>
+                        <dd class="col-sm-8">@Model.Patient.LastName</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">OIB</dt>
+                        <dd class="col-sm-8">@Model.Patient.OIB</dd>
+
+                        <dt class="col-sm-4">Date of Birth</dt>
+                        <dd class="col-sm-8">@Model.Patient.DateOfBirth.ToString("dd.MM.yyyy")</dd>
+
+                        <dt class="col-sm-4">Gender</dt>
+                        <dd class="col-sm-8">@Model.Patient.Gender</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical History -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Medical History</h4>
+            <a asp-controller="MedicalHistory" asp-action="Create" asp-route-patientId="@Model.Patient.Id"
+               class="btn btn-light btn-sm">
+                <i class="bi bi-plus"></i> Add History Entry
+            </a>
+        </div>
+        <div class="card-body">
+            @if (!Model.MedicalHistories.Any())
+            {
+                <div class="alert alert-info">
+                    No medical history records found.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Disease</th>
+                                <th>Start Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var history in Model.MedicalHistories.OrderByDescending(h => h.StartDate))
+                            {
+                                <tr>
+                                    <td>@history.DiseaseName</td>
+                                    <td>@history.StartDate.ToString("dd.MM.yyyy")</td>
+                                    <td>
+	                                    @if (history.EndDate.HasValue)
+	                                    {
+                                            <span class="badge bg-success">Recovered</span>
+
+                                             @history.EndDate?.ToString("dd.MM.yyyy")
+                                        }
+	                                    else
+	                                    {
+		                                    <span class="badge bg-warning">Ongoing</span>
+	                                    }
+                                    </td>
+
+                                    <td>
+                                        <div class="btn-group">
+                                            <a asp-controller="MedicalHistory" asp-action="Edit" asp-route-id="@history.Id"
+                                               class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a asp-controller="MedicalHistory" asp-action="Delete" asp-route-id="@history.Id"
+                                               class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Examinations -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Examinations</h4>
+            <a asp-controller="Examination" asp-action="Create" asp-route-patientId="@Model.Patient.Id"
+               class="btn btn-light btn-sm">
+                <i class="bi bi-plus"></i> New Examination
+            </a>
+        </div>
+        <div class="card-body">
+            @if (!Model.Examinations.Any())
+            {
+                <div class="alert alert-info">
+                    No examinations recorded.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+	                            <th>Date</th>
+	                            <th>Time</th>
+                                <th>Type</th>
+                                <th>Notes</th>
+                                <th>Details</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var exam in Model.Examinations.OrderByDescending(e => e.ExaminationDateTime))
+                            {
+                                <tr>
+	                                <td>@exam.ExaminationDateTime.ToString("dd.MM.yyyy")</td>
+	                                <td>@exam.ExaminationDateTime.ToString("HH:mm")</td>
+                                    <td>
+                                        <span class="badge bg-secondary">@exam.ExaminationType</span>
+                                    </td>
+                                    <td>@exam.Notes</td>
+                                    <td>
+                                        <a asp-controller="Examination" asp-action="Details" asp-route-id="@exam.Id"
+                                           class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-images"></i> View
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a asp-controller="Examination" asp-action="Edit" asp-route-id="@exam.Id"
+                                               class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a asp-controller="Examination" asp-action="Delete" asp-route-id="@exam.Id"
+                                               class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Prescriptions -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Prescriptions</h4>
+            <a asp-controller="Prescription" asp-action="Create" asp-route-patientId="@Model.Patient.Id"
+               class="btn btn-light btn-sm">
+                <i class="bi bi-plus"></i> New Prescription
+            </a>
+        </div>
+        <div class="card-body">
+            @if (!Model.Prescriptions.Any())
+            {
+                <div class="alert alert-info">
+                    No prescriptions found.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+	                            <th>Date</th>
+                                <th>Medicine</th>
+                                <th>Dosage</th>
+                                <th>Instructions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var prescription in Model.Prescriptions.OrderByDescending(p => p.PrescriptionDate))
+                            {
+                                <tr>
+	                                <td>@prescription.PrescriptionDate.ToString("dd.MM.yyyy")</td>
+                                    <td>@prescription.MedicineName</td>
+                                    <td>@prescription.Dosage</td>
+                                    <td>@prescription.Instructions</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a asp-controller="Prescription" asp-action="Edit" asp-route-id="@prescription.Id"
+                                               class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a asp-controller="Prescription" asp-action="Delete" asp-route-id="@prescription.Id"
+                                               class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            border-radius: 0.5rem;
+        }
+
+        .card-header {
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+    </style>
+}
